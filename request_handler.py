@@ -128,6 +128,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         self._set_headers(201)
         content_len = int(self.headers.get('content-length', 0))
         post_body = self.rfile.read(content_len)
+        response = {}
 
         # Convert JSON string to a Python dictionary
         post_body = json.loads(post_body)
@@ -146,21 +147,22 @@ class HandleRequests(BaseHTTPRequestHandler):
         # function next.
         if resource == "animals":
             new_animal = create_animal(post_body)
-
-            # Encode the new animal and send in response
-            self.wfile.write(json.dumps(new_animal).encode())
+            response = new_animal
 
         if resource == "employees":
             new_employee = create_employee(post_body)
-            self.wfile.write(json.dumps(new_employee).encode())
+            response = new_employee
 
         if resource == "locations":
             new_location = create_location(post_body)
-            self.wfile.write(json.dumps(new_location).encode())
-            
+            response = new_location
+
         if resource == "customers":
             new_customer = create_customer(post_body)
-            self.wfile.write(json.dumps(new_customer).encode())
+            response = new_customer
+
+        # Encode the new animal and send in response
+        self.wfile.write(json.dumps(response).encode())
 
     def do_DELETE(self):
         # Set a 204 response code
@@ -172,19 +174,19 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Delete a single animal from the list
         if resource == "animals":
             delete_animal(id)
-            
+
         if resource == "locations":
             delete_location(id)
-            
+
         if resource == "employees":
             delete_employee(id)
-            
+
         if resource == "customers":
             delete_customer(id)
 
         # Encode the new animal and send in response
         self.wfile.write("".encode())
-    
+
     # Here's a method on the class that overrides the parent's method.
     # It handles any PUT request.
 
@@ -200,13 +202,13 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Delete a single animal from the list
         if resource == "animals":
             update_animal(id, post_body)
-            
+
         if resource == "locations":
             update_location(id, post_body)
-            
+
         if resource == "customers":
             update_customer(id, post_body)
-            
+
         if resource == "employees":
             update_employee(id, post_body)
 
