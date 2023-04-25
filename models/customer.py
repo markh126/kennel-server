@@ -1,5 +1,7 @@
 class Customer():
-    def __init__(self, id, name, phone):
+    def __init__(self, id, name, address, email = "", password = ""):
         self.id = id
         self.name = name
-        self.phone = phone
+        self.address = address
+        self.email = email
+        self.password = password
