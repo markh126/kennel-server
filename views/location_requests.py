@@ -99,18 +99,35 @@ def create_location(location):
 
 
 def delete_location(id):
-    location_index = -1
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        db_cursor = conn.cursor()
 
-    for index, location in enumerate(LOCATIONS):
-        if location["id"] == id:
-            location_index = index
-
-    if location_index >= 0:
-        LOCATIONS.pop(location_index)
+        db_cursor.execute("""
+        DELETE FROM location
+        WHERE id = ?
+        """, (id, ))
 
 
 def update_location(id, new_location):
-    for index, location in enumerate(LOCATIONS):
-        if location["id"] == id:
-            LOCATIONS[index] = new_location
-            break
+    with sqlite3.connect("./kennel.sqlite3") as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        UPDATE Location
+            SET
+                name = ?,
+                address = ?
+        WHERE id = ?
+        """, (new_location['name'], new_location['address'], id, ))
+
+        # Were any rows affected?
+        # Did the client send an `id` that exists?
+        rows_affected = db_cursor.rowcount
+
+    # return value of this function
+    if rows_affected == 0:
+        # Forces 404 response by main module
+        return False
+    else:
+        # Forces 204 response by main module
+        return True

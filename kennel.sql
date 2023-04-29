@@ -116,3 +116,56 @@ SELECT
     e.location_id
 FROM employee e
 WHERE e.location_id = 2
+
+INSERT INTO `Animal` VALUES (null, "Daps", "Kennel", "Boxer", 2, 2);
+INSERT INTO `Employee` VALUES (null, "Leah Hoefling", "200 Success Way", 2)
+INSERT INTO `Customer` VALUES (null, "Emily Lemmon", "454 Mulberry Way", "emily@lemmon.com", "password")
+
+UPDATE Location
+SET name = "Nashville North"
+WHERE id = 1
+
+SELECT
+    a.id,
+    a.name,
+    a.breed,
+    a.status,
+    a.location_id,
+    a.customer_id,
+    c.name customer_name,
+    c.address customer_address,
+    c.email customer_email
+FROM Animal a
+JOIN Customer c
+    ON c.id = a.customer_id
+
+INSERT INTO `Animal` VALUES (null, "Pete", "Kennel", "Chihuahua", 2, 1);
+
+SELECT
+    a.id,
+    a.name,
+    a.breed,
+    a.status,
+    a.location_id,
+    a.customer_id,
+    l.name location_name,
+    l.address location_address,
+    c.name customer_name,
+    c.address customer_address,
+    c.email customer_email
+FROM Animal a
+JOIN Location l
+    ON l.id = a.location_id
+JOIN Customer c
+    ON c.id = a.customer_id
+
+SELECT
+    a.id,
+    a.name,
+    a.address,
+    a.location_id,
+    l.name location_name,
+    l.address location_address
+FROM employee a
+JOIN location l
+    ON l.id = a.location_id
